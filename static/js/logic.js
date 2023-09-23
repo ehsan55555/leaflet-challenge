@@ -4,10 +4,33 @@ const myMap = L.map('map', {
   zoom: 2, // Set the initial zoom level
 });
 
-// Add a tile layer (e.g., OpenStreetMap)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(myMap);
+// Define different tile layer providers
+const satelliteTileLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+  maxZoom: 20,
+  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+  attribution: '&copy; Google Maps',
+});
+
+const grayscaleTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  subdomains: 'abcd',
+  maxZoom: 19,
+});
+
+const outdoorsTileLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  maxZoom: 17,
+  attribution: '&copy; <a href="https://www.opentopomap.org/about">OpenTopoMap</a> contributors',
+});
+
+// Create an object to hold the different base maps
+const baseMaps = {
+  'Satellite': satelliteTileLayer,
+  'Grayscale': grayscaleTileLayer,
+  'Outdoors': outdoorsTileLayer,
+};
+
+// Add one of the base maps as the default layer
+satelliteTileLayer.addTo(myMap);
 
 // Use the URL of the earthquake JSON dataset
 const earthquakeURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
@@ -37,12 +60,47 @@ fetch(earthquakeURL)
         fillOpacity: 0.7,
         color: 'black',
         weight: 1,
-      }).addTo(myMap);
+      });
 
       // Add a popup with additional information
       marker.bindPopup(`<strong>Magnitude:</strong> ${magnitude}<br><strong>Depth:</strong> ${depth} km`);
+
+      // Add the marker to the earthquake Layer Group
+      marker.addTo(earthquakeLayerGroup);
     });
   });
+
+// Use the URL of the tectonic plates GeoJSON dataset
+const tectonicPlatesURL = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json';
+
+// Fetch tectonic plates data and create a GeoJSON layer
+fetch(tectonicPlatesURL)
+  .then(response => response.json())
+  .then(data => {
+    // Create a GeoJSON layer for tectonic plates
+    const tectonicPlatesLayer = L.geoJSON(data, {
+      style: {
+        color: 'orange', // Customize the style of the tectonic plates layer
+        weight: 2,
+      },
+    });
+
+    // Add the tectonic plates layer to the map
+    tectonicPlatesLayer.addTo(tectonicPlatesLayerGroup);
+  });
+
+// Create Layer Groups for earthquakes and tectonic plates
+const earthquakeLayerGroup = L.layerGroup();
+const tectonicPlatesLayerGroup = L.layerGroup();
+
+// Define an overlay object to hold the Layer Groups
+const overlays = {
+  'Earthquakes': earthquakeLayerGroup,
+  'Tectonic Plates': tectonicPlatesLayerGroup,
+};
+
+// Add the layer control with separate Earthquakes and Tectonic Plates layers
+L.control.layers(baseMaps, overlays).addTo(myMap);
 
 // Function to define marker color based on depth
 function getColorBasedOnDepth(depth) {
