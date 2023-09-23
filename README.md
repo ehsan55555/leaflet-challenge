@@ -14,16 +14,19 @@ This project consists of two parts, each focusing on visualizing earthquake data
     - **js/**
       - `logic.js` - The JavaScript file for handling Part 1 logic.
 
-#### Requirements (Part 1):
+### Part 1 Description:
 
-- TileLayer loads without error (20 points)
-- Connects to geojson API using D3 without error (20 points)
-- Markers with size corresponding to earthquake magnitude (10 points)
-- A legend showing the depth and their corresponding color (10 points)
-- Data points scale with magnitude level (10 points)
-- Data points colors change with depth level (10 points)
-- Each point has a tooltip with the Magnitude, the location, and depth (10 points)
-- All data points load in the correct locations (10 points)
+In Part 1 of the project, the following tasks were accomplished:
+
+- Created an interactive map using Leaflet.
+- Loaded a TileLayer without errors.
+- Connected to a geojson API using D3 without errors.
+- Created markers with sizes corresponding to earthquake magnitudes.
+- Implemented a legend displaying earthquake depths and their corresponding colors.
+- Ensured that data points scaled with magnitude level.
+- Adjusted data point colors based on depth level.
+- Added tooltips to each data point, displaying the magnitude, location, and depth.
+- Ensured that all data points were correctly positioned on the map.
 
 ## Part 2: Leaflet-Part-2
 
@@ -37,12 +40,14 @@ This project consists of two parts, each focusing on visualizing earthquake data
     - **js/**
       - `logicPart2.js` - The JavaScript file for handling Part 2 logic.
 
-#### Additional Requirements (Part 2):
+### Part 2 Description:
 
-- Plot the tectonic plates dataset on the map in addition to the earthquakes.
-- Add other base maps to choose from.
-- Put each dataset into separate overlays that can be turned on and off independently.
-- Add layer controls to your map.
+In Part 2 of the project, the following tasks were accomplished:
+
+- Plotted the tectonic plates dataset on the map alongside the earthquakes.
+- Added additional base maps to choose from, including satellite, grayscale, and outdoors.
+- Organized each dataset into separate overlays that can be turned on and off independently.
+- Added a single layer control to the map, allowing users to toggle between base maps, earthquakes, and tectonic plates.
 
 ## Getting Started
 
